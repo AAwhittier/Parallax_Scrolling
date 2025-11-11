@@ -1,0 +1,95 @@
+﻿# =============== #
+# Unity generated #
+# =============== #
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+sysinfo.txt
+*.stacktrace
+
+# Cache directories (Unity 2022+)
+ProjectSettings/boot.config
+ScriptMapper/
+ShaderCache/
+Artifacts/
+
+# =============== #
+# Rider / JetBrains #
+# =============== #
+.idea/
+*.sln.iml
+*.DotSettings.user
+
+# =============== #
+# Visual Studio / VS Code #
+# =============== #
+.vscode/
+.vs/
+*.user
+*.userprefs
+
+# =============== #
+# Auto-generated #
+# =============== #
+*.pidb
+*.booproj
+*.svd
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.bak
+*.swp
+*.lock
+*.mdb
+*.pdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.booproj.meta
+*.db
+*.idx
+
+# =============== #
+# OS generated #
+# =============== #
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =============== #
+# Builds / Packages #
+# =============== #
+[Bb]uilds/
+[Pp]ackages/com.unity.package-manager/
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.ipa
+*.exe
+*.zip
+*.tar
+*.gz
+
+# =============== #
+# Unity Version Control / Plastic SCM #
+# =============== #
+# (Optional) prevent local Plastic metadata from being committed
+.plastic/
+plastic.workspace/
+
+# =============== #
+# Crash / Diagnostic #
+# =============== #
+CrashReports/
+DiagnosticsReports/
+MemoryCaptures/
