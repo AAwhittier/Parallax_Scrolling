@@ -1,10 +1,14 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace CameraSystem
 {
     /// <summary>
     /// Simple and robust 2D camera controller with keyboard input.
     /// Attach this to your Camera GameObject for manual camera control.
+    /// Supports both Legacy Input and New Input System.
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class CameraController2D : MonoBehaviour
@@ -80,6 +84,30 @@ namespace CameraSystem
         {
             Vector2 input = Vector2.zero;
 
+#if ENABLE_INPUT_SYSTEM
+            // New Input System
+            var keyboard = Keyboard.current;
+            if (keyboard == null) return;
+
+            // Arrow keys
+            if (useArrowKeys)
+            {
+                if (keyboard.upArrowKey.isPressed) input.y += 1f;
+                if (keyboard.downArrowKey.isPressed) input.y -= 1f;
+                if (keyboard.leftArrowKey.isPressed) input.x -= 1f;
+                if (keyboard.rightArrowKey.isPressed) input.x += 1f;
+            }
+
+            // WASD keys
+            if (useWASD)
+            {
+                if (keyboard.wKey.isPressed) input.y += 1f;
+                if (keyboard.sKey.isPressed) input.y -= 1f;
+                if (keyboard.aKey.isPressed) input.x -= 1f;
+                if (keyboard.dKey.isPressed) input.x += 1f;
+            }
+#else
+            // Legacy Input System
             // Arrow keys
             if (useArrowKeys)
             {
@@ -97,6 +125,7 @@ namespace CameraSystem
                 if (Input.GetKey(KeyCode.A)) input.x -= 1f;
                 if (Input.GetKey(KeyCode.D)) input.x += 1f;
             }
+#endif
 
             // Normalize diagonal movement
             if (input.magnitude > 1f)
@@ -119,6 +148,35 @@ namespace CameraSystem
         {
             if (!useMouseDrag) return;
 
+#if ENABLE_INPUT_SYSTEM
+            // New Input System
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            // Start dragging
+            if (mouse.rightButton.wasPressedThisFrame)
+            {
+                isDragging = true;
+                lastMousePosition = mouse.position.ReadValue();
+            }
+
+            // Stop dragging
+            if (mouse.rightButton.wasReleasedThisFrame)
+            {
+                isDragging = false;
+            }
+
+            // Process drag
+            if (isDragging)
+            {
+                Vector3 currentMousePosition = mouse.position.ReadValue();
+                Vector3 delta = currentMousePosition - lastMousePosition;
+                Vector3 move = new Vector3(-delta.x, -delta.y, 0f) * mouseDragSensitivity * Time.deltaTime;
+                targetPosition += move;
+                lastMousePosition = currentMousePosition;
+            }
+#else
+            // Legacy Input System
             // Start dragging
             if (Input.GetMouseButtonDown(1)) // Right mouse button
             {
@@ -140,6 +198,7 @@ namespace CameraSystem
                 targetPosition += move;
                 lastMousePosition = Input.mousePosition;
             }
+#endif
         }
 
         /// <summary>
