@@ -1,10 +1,14 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace CameraSystem
 {
     /// <summary>
     /// Handles camera zoom functionality with smooth transitions.
     /// Attach this to your Camera GameObject for zoom controls.
+    /// Supports both Legacy Input and New Input System.
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class CameraZoom : MonoBehaviour
@@ -69,6 +73,40 @@ namespace CameraSystem
         /// </summary>
         private void HandleInput()
         {
+#if ENABLE_INPUT_SYSTEM
+            // New Input System
+            var mouse = Mouse.current;
+            var keyboard = Keyboard.current;
+
+            // Mouse scroll wheel zoom
+            if (enableScrollWheelZoom && mouse != null)
+            {
+                float scroll = mouse.scroll.ReadValue().y;
+                if (scroll != 0f)
+                {
+                    // Normalize scroll value (typical scroll values are much larger in new input system)
+                    targetZoom -= (scroll / 120f) * scrollSensitivity;
+                    targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+                }
+            }
+
+            // Keyboard zoom (+ and - keys, or Equals and Minus)
+            if (enableKeyboardZoom && keyboard != null)
+            {
+                if (keyboard.equalsKey.isPressed || keyboard.numpadPlusKey.isPressed)
+                {
+                    targetZoom -= keyboardZoomSpeed * Time.deltaTime;
+                }
+
+                if (keyboard.minusKey.isPressed || keyboard.numpadMinusKey.isPressed)
+                {
+                    targetZoom += keyboardZoomSpeed * Time.deltaTime;
+                }
+
+                targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+            }
+#else
+            // Legacy Input System
             // Mouse scroll wheel zoom
             if (enableScrollWheelZoom)
             {
@@ -95,6 +133,7 @@ namespace CameraSystem
 
                 targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
             }
+#endif
         }
 
         /// <summary>

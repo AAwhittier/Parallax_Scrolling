@@ -1,4 +1,7 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace CameraSystem
 {
@@ -126,7 +129,13 @@ namespace CameraSystem
         /// </summary>
         public static Vector3 GetMouseWorldPosition(Camera camera)
         {
+#if ENABLE_INPUT_SYSTEM
+            var mouse = Mouse.current;
+            if (mouse == null) return Vector3.zero;
+            Vector3 mousePos = mouse.position.ReadValue();
+#else
             Vector3 mousePos = Input.mousePosition;
+#endif
             mousePos.z = Mathf.Abs(camera.transform.position.z);
             return camera.ScreenToWorldPoint(mousePos);
         }
